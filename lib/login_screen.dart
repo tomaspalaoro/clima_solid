@@ -1,3 +1,4 @@
+import 'package:clima_solid/language_button.dart';
 import 'package:flutter/material.dart';
 
 /// Pantalla de inicio de sesión
@@ -24,6 +25,11 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        actions: [LanguageButton()],
+      ),
+      extendBodyBehindAppBar: true,
       body: Stack(
         children: [
           _buildBackground(),
@@ -36,6 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
               key: _formKey,
               child: Column(
                 children: [
+                  const SizedBox(height: 20.0),
                   _buildTitle(),
                   const SizedBox(height: 40.0),
                   _buildTextField(
