@@ -1,3 +1,4 @@
+import 'package:clima_solid/home_screen.dart';
 import 'package:clima_solid/language_button.dart';
 import 'package:flutter/material.dart';
 
@@ -27,7 +28,12 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        actions: [LanguageButton()],
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: LanguageButton(),
+          ),
+        ],
       ),
       extendBodyBehindAppBar: true,
       body: Stack(
@@ -85,6 +91,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         if (_formKey.currentState!.validate()) {
                           // TODO
                           print('Login: ${_emailController.text}');
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const HomeScreen(),
+                            ),
+                            (route) => false,
+                          );
                         }
                       },
                       child: Text(
