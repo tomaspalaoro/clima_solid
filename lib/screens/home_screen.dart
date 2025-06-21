@@ -1,5 +1,7 @@
-import 'package:clima_solid/language_button.dart';
-import 'package:clima_solid/login_screen.dart';
+import 'package:clima_solid/widgets/language_button.dart';
+import 'package:clima_solid/screens/city_weather_tab.dart';
+import 'package:clima_solid/screens/contact_form_tab.dart';
+import 'package:clima_solid/widgets/logout_button.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -49,44 +51,5 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         ],
       ),
     );
-  }
-}
-
-class LogoutButton extends StatelessWidget {
-  const LogoutButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      icon: Icon(Icons.logout, color: Theme.of(context).colorScheme.error),
-      iconSize: 20,
-      onPressed:
-          () => Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => LoginScreen()),
-            (route) => false,
-          ),
-    );
-  }
-}
-
-class CityWeatherTab extends StatelessWidget {
-  final String city;
-  final String language;
-
-  const CityWeatherTab({required this.city, required this.language, super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Placeholder();
-  }
-}
-
-class ContactFormTab extends StatelessWidget {
-  const ContactFormTab({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Placeholder();
   }
 }

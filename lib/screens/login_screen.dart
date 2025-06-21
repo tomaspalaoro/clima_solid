@@ -1,5 +1,5 @@
-import 'package:clima_solid/home_screen.dart';
-import 'package:clima_solid/language_button.dart';
+import 'package:clima_solid/screens/home_screen.dart';
+import 'package:clima_solid/widgets/language_button.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
