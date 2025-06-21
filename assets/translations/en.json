@@ -1,0 +1,12 @@
+{
+    "app_title": "Clima SOLID",
+    "login": "Login",
+    "email": "Email",
+    "password": "Password",
+    "user": "User",
+    "enter_password": "Enter password",
+    "enter_email": "Enter email",
+    "required_field": "This field is required",
+    "invalid_email": "Invalid email",
+    "contact": "Contact"
+}

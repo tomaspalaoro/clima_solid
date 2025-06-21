@@ -1,5 +1,6 @@
 import 'package:clima_solid/home_screen.dart';
 import 'package:clima_solid/language_button.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 /// Pantalla de inicio de sesión
@@ -52,24 +53,24 @@ class _LoginScreenState extends State<LoginScreen> {
                   _buildTitle(),
                   const SizedBox(height: 40.0),
                   _buildTextField(
-                    label: 'Usuario',
-                    hint: 'Introduce tu correo electrónico',
+                    label: tr('user'),
+                    hint: tr('enter_email'),
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Este campo es obligatorio';
+                        return tr('required_field');
                       }
                       if (!value.contains('@')) {
-                        return 'Introduce un correo válido';
+                        return tr('invalid_email');
                       }
                       return null;
                     },
                   ),
                   const SizedBox(height: 20.0),
                   _buildTextField(
-                    label: 'Contraseña',
-                    hint: 'Introduce tu contraseña',
+                    label: tr('password'),
+                    hint: tr('enter_password'),
                     controller: _passwordController,
                     isPassword: true,
                     obscureText: _obscurePassword,
@@ -78,7 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Este campo es obligatorio';
+                        return tr('required_field');
                       }
                       return null;
                     },
@@ -101,7 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         }
                       },
                       child: Text(
-                        'Acceder',
+                        tr('login'),
                         style: Theme.of(
                           context,
                         ).textTheme.titleMedium?.copyWith(
@@ -141,7 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
         const Icon(Icons.sunny, color: Colors.white, size: 40),
         const SizedBox(width: 10),
         Text(
-          'Clima SOLID',
+          tr('app_title'),
           style: Theme.of(context).textTheme.headlineLarge?.copyWith(
             fontWeight: FontWeight.bold,
             color: Colors.white,

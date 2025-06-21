@@ -1,6 +1,7 @@
 import 'package:clima_solid/language_button.dart';
 import 'package:clima_solid/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -36,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           isScrollable: true,
           tabs: [
             ..._cities.map((city) => Tab(text: city)),
-            const Tab(text: 'Contacto'),
+            Tab(text: tr('contact')),
           ],
         ),
       ),
