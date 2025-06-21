@@ -1,6 +1,4 @@
-import 'package:clima_solid/cubits/weather_cubit.dart';
 import 'package:clima_solid/screens/login_screen.dart';
-import 'package:clima_solid/services/weather_api_service.dart';
 import 'package:clima_solid/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -20,16 +18,11 @@ void main() async {
       child: Builder(
         builder: (context) {
           //
-          final WeatherApiService weatherApiService = WeatherApiService();
-          final OpenWeatherRepository weatherRepository = OpenWeatherRepository(
-            weatherApiService,
-          );
           // Inicializa el idioma actual a partir del context del Builder (que ya tiene el context de EasyLocalization)
           final Locale initialLocale = context.locale;
           //
           return MultiBlocProvider(
             providers: [
-              BlocProvider(create: (_) => WeatherCubit(weatherRepository)),
               BlocProvider(create: (_) => LanguageCubit(initialLocale)),
             ],
             child: const MainApp(),

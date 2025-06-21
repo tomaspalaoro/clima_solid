@@ -3,26 +3,48 @@ import 'package:clima_solid/cubits/weather_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:clima_solid/cubits/language_cubit.dart';
+import 'package:clima_solid/services/weather_api_service.dart';
 
 /// Widget para mostrar el clima por horas de una ciudad
-class CityWeatherTab extends StatelessWidget {
+class CityWeatherTab extends StatefulWidget {
   final String city;
 
   const CityWeatherTab({required this.city, super.key});
 
   @override
+  State<CityWeatherTab> createState() => _CityWeatherTabState();
+}
+
+class _CityWeatherTabState extends State<CityWeatherTab>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+
+    final langCode = context.read<LanguageCubit>().state.languageCode;
+    final WeatherApiService weatherApiService = WeatherApiService();
+    final OpenWeatherRepository weatherRepository = OpenWeatherRepository(
+      weatherApiService,
+    );
+
+    return BlocProvider(
+      create:
+          (_) =>
+              WeatherCubit(weatherRepository)
+                ..fetchForecast(city: widget.city, lang: langCode),
+      child: _WeatherView(),
+    );
+  }
+}
+
+class _WeatherView extends StatelessWidget {
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<WeatherCubit, WeatherState>(
       builder: (context, state) {
-        if (state is WeatherInitial) {
-          final langCode = context.read<LanguageCubit>().state.languageCode;
-          context.read<WeatherCubit>().fetchForecast(
-            city: city,
-            lang: langCode,
-          );
-          return const SizedBox.shrink();
-        }
-
         if (state is WeatherLoading) {
           return const Center(child: CircularProgressIndicator());
         }
@@ -80,8 +102,6 @@ class CityWeatherTab extends StatelessWidget {
             ),
           );
         }
-
-        // Por si acaso
         return const SizedBox.shrink();
       },
     );
