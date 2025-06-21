@@ -1,3 +1,4 @@
+import 'package:clima_solid/login_screen.dart';
 import 'package:clima_solid/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +11,6 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: Scaffold(), theme: AppTheme.light);
+    return MaterialApp(home: LoginScreen(), theme: AppTheme.light);
   }
 }
