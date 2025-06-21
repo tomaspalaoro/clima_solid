@@ -46,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       body: TabBarView(
         controller: _tabController,
         children: [
-          ..._cities.map((city) => CityWeatherTab(city: city, language: 'en')),
+          ..._cities.map((city) => CityWeatherTab(city: city)),
           const ContactFormTab(),
         ],
       ),
