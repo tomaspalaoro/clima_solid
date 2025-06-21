@@ -1,6 +1,7 @@
 import 'package:clima_solid/screens/home_screen.dart';
 import 'package:clima_solid/widgets/language_button.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 /// Pantalla de inicio de sesión
@@ -89,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: double.infinity,
                     child: FilledButton(
                       onPressed: () {
-                        if (_formKey.currentState!.validate()) {
+                        if (_formKey.currentState!.validate() || kDebugMode) {
                           // TODO
                           print('Login: ${_emailController.text}');
                           Navigator.pushAndRemoveUntil(

@@ -20,23 +20,42 @@ class _CityWeatherTabState extends State<CityWeatherTab>
   @override
   bool get wantKeepAlive => true;
 
+  late WeatherCubit weatherCubit;
+
+  @override
+  void initState() {
+    super.initState();
+    // Inicializar WeatherCubit
+    final WeatherApiService apiService = WeatherApiService();
+    final OpenWeatherRepository weatherRepository = OpenWeatherRepository(
+      apiService,
+    );
+    weatherCubit = WeatherCubit(weatherRepository);
+
+    // Traer lista de horas al estado inicial
+    final lang = context.read<LanguageCubit>().state.languageCode;
+    weatherCubit.fetchForecast(city: widget.city, lang: lang);
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
-    final langCode = context.read<LanguageCubit>().state.languageCode;
-    final WeatherApiService weatherApiService = WeatherApiService();
-    final OpenWeatherRepository weatherRepository = OpenWeatherRepository(
-      weatherApiService,
+    return BlocListener<LanguageCubit, Locale>(
+      listener: (context, newLocale) {
+        // Si cambia de idioma, traer listado otra vez
+        weatherCubit.fetchForecast(
+          city: widget.city,
+          lang: newLocale.languageCode,
+        );
+      },
+      child: BlocProvider.value(value: weatherCubit, child: _WeatherView()),
     );
+  }
 
-    return BlocProvider(
-      create:
-          (_) =>
-              WeatherCubit(weatherRepository)
-                ..fetchForecast(city: widget.city, lang: langCode),
-      child: _WeatherView(),
-    );
+  @override
+  void dispose() {
+    weatherCubit.close();
+    super.dispose();
   }
 }
 
