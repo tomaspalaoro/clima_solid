@@ -20,12 +20,16 @@ class _CityWeatherTabState extends State<CityWeatherTab>
   @override
   bool get wantKeepAlive => true;
 
+  /// Protege de re-inicializaciones indeseadas
+  bool _isInitialized = false;
+
   late WeatherCubit weatherCubit;
   late String currentLang;
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    if (_isInitialized) return;
+    super.didChangeDependencies();
     // Inicializar WeatherCubit
     final WeatherRepository weatherRepository =
         context.read<WeatherRepository>();
@@ -34,6 +38,7 @@ class _CityWeatherTabState extends State<CityWeatherTab>
     // Traer lista de horas al estado inicial
     currentLang = context.read<LanguageCubit>().state.languageCode;
     weatherCubit.fetchForecast(city: widget.city, lang: currentLang);
+    _isInitialized = true;
   }
 
   @override
@@ -41,13 +46,17 @@ class _CityWeatherTabState extends State<CityWeatherTab>
     super.build(context);
     return BlocListener<LanguageCubit, Locale>(
       listener: (context, newLocale) {
-        // Si cambia de idioma, traer listado otra vez
+        // Si cambia de idioma, traer listado otra vez.
+        // No recarga los widgets, solo dispara la lógica y actualiza los estados
         if (newLocale.languageCode != currentLang) {
           currentLang = newLocale.languageCode;
           weatherCubit.fetchForecast(city: widget.city, lang: currentLang);
         }
       },
-      child: BlocProvider.value(value: weatherCubit, child: _WeatherView()),
+      child: BlocProvider.value(
+        value: weatherCubit,
+        child: _WeatherView(city: widget.city),
+      ),
     );
   }
 
@@ -59,6 +68,15 @@ class _CityWeatherTabState extends State<CityWeatherTab>
 }
 
 class _WeatherView extends StatelessWidget {
+  final String city;
+
+  const _WeatherView({required this.city});
+
+  /// Refresca los datos al arrastrar
+  Future<void> _pullDownRefresh(WeatherCubit weatherCubit, String lang) async {
+    await weatherCubit.fetchForecast(city: city, lang: lang);
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<WeatherCubit, WeatherState>(
@@ -80,46 +98,54 @@ class _WeatherView extends StatelessWidget {
 
         if (state is WeatherLoaded) {
           final loadedHours = state.hoursList;
+          final weatherCubit = context.read<WeatherCubit>();
+          final lang = context.read<LanguageCubit>().state.languageCode;
 
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: ListView.builder(
-              itemCount: loadedHours.length,
-              itemBuilder: (context, index) {
-                final h = loadedHours[index];
-                return Row(
-                  children: [
-                    Image.network(
-                      'https://openweathermap.org/img/wn/${h.iconId}@2x.png',
-                      height: 100,
-                      width: 100,
-                      errorBuilder: (context, error, stackTrace) {
-                        return const Icon(Icons.error, size: 60);
-                      },
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${h.dateTime.hour.toString().padLeft(2, '0')}:00 — ${h.temp.toStringAsFixed(1)}°',
-                            style: Theme.of(context).textTheme.titleLarge,
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            h.description,
-                            style: const TextStyle(fontSize: 14),
-                          ),
-                        ],
+            child: RefreshIndicator(
+              // Refresca los datos al arrastrar
+              onRefresh: () => _pullDownRefresh(weatherCubit, lang),
+              child: ListView.builder(
+                physics: const AlwaysScrollableScrollPhysics(),
+                itemCount: loadedHours.length,
+                itemBuilder: (context, index) {
+                  final h = loadedHours[index];
+                  return Row(
+                    children: [
+                      Image.network(
+                        'https://openweathermap.org/img/wn/${h.iconId}@2x.png',
+                        height: 100,
+                        width: 100,
+                        errorBuilder: (context, error, stackTrace) {
+                          return const Icon(Icons.image_not_supported_outlined, size: 100);
+                        },
                       ),
-                    ),
-                  ],
-                );
-              },
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${h.dateTime.hour.toString().padLeft(2, '0')}:00 — ${h.temp.toStringAsFixed(1)}°',
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              h.description,
+                              style: const TextStyle(fontSize: 14),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
             ),
           );
         }
+
         return const SizedBox.shrink();
       },
     );
