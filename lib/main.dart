@@ -1,4 +1,5 @@
 import 'package:clima_solid/screens/login_screen.dart';
+import 'package:clima_solid/services/weather_api_service.dart';
 import 'package:clima_solid/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -20,12 +21,19 @@ void main() async {
           //
           // Inicializa el idioma actual a partir del context del Builder (que ya tiene el context de EasyLocalization)
           final Locale initialLocale = context.locale;
+          // Inicializa el repositorio compartido por toda la apps
+          final WeatherRepository repository = OpenWeatherRepository(
+            OpenWeatherApiService(),
+          );
           //
-          return MultiBlocProvider(
-            providers: [
-              BlocProvider(create: (_) => LanguageCubit(initialLocale)),
-            ],
-            child: const MainApp(),
+          return RepositoryProvider<WeatherRepository>.value(
+            value: repository,
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider(create: (_) => LanguageCubit(initialLocale)),
+              ],
+              child: const MainApp(),
+            ),
           );
         },
       ),

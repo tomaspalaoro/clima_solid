@@ -7,7 +7,10 @@ class WeatherCubit extends Cubit<WeatherState> {
 
   WeatherCubit(this.repository) : super(WeatherInitial());
 
-  Future<void> fetchForecast({required String city, String lang = 'en'}) async {
+  Future<void> fetchForecast({
+    required String city,
+    required String lang,
+  }) async {
     emit(WeatherLoading());
     try {
       final forecast = await repository.getHourlyForecast(

@@ -21,20 +21,19 @@ class _CityWeatherTabState extends State<CityWeatherTab>
   bool get wantKeepAlive => true;
 
   late WeatherCubit weatherCubit;
+  late String currentLang;
 
   @override
   void initState() {
     super.initState();
     // Inicializar WeatherCubit
-    final WeatherApiService apiService = WeatherApiService();
-    final OpenWeatherRepository weatherRepository = OpenWeatherRepository(
-      apiService,
-    );
+    final WeatherRepository weatherRepository =
+        context.read<WeatherRepository>();
     weatherCubit = WeatherCubit(weatherRepository);
 
     // Traer lista de horas al estado inicial
-    final lang = context.read<LanguageCubit>().state.languageCode;
-    weatherCubit.fetchForecast(city: widget.city, lang: lang);
+    currentLang = context.read<LanguageCubit>().state.languageCode;
+    weatherCubit.fetchForecast(city: widget.city, lang: currentLang);
   }
 
   @override
@@ -43,10 +42,10 @@ class _CityWeatherTabState extends State<CityWeatherTab>
     return BlocListener<LanguageCubit, Locale>(
       listener: (context, newLocale) {
         // Si cambia de idioma, traer listado otra vez
-        weatherCubit.fetchForecast(
-          city: widget.city,
-          lang: newLocale.languageCode,
-        );
+        if (newLocale.languageCode != currentLang) {
+          currentLang = newLocale.languageCode;
+          weatherCubit.fetchForecast(city: widget.city, lang: currentLang);
+        }
       },
       child: BlocProvider.value(value: weatherCubit, child: _WeatherView()),
     );
@@ -64,7 +63,7 @@ class _WeatherView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<WeatherCubit, WeatherState>(
       builder: (context, state) {
-        if (state is WeatherLoading) {
+        if (state is WeatherLoading || state is WeatherInitial) {
           return const Center(child: CircularProgressIndicator());
         }
 
