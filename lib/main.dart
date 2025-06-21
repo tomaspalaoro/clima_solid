@@ -2,6 +2,8 @@ import 'package:clima_solid/screens/login_screen.dart';
 import 'package:clima_solid/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:clima_solid/cubits/language_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,7 +15,19 @@ void main() async {
       supportedLocales: const [Locale('en'), Locale('es')],
       path: 'assets/translations',
       fallbackLocale: const Locale('en'),
-      child: MainApp(),
+      child: Builder(
+        builder: (context) {
+          return BlocProvider(
+            // Inyectamos el locale inicial directamente en el Cubit
+            create:
+                (_) => LanguageCubit(
+                  context
+                      .locale, // Inicializa el idioma actual a partir del context del Builder (que ya tiene el context de EasyLocalization)
+                ),
+            child: const MainApp(),
+          );
+        },
+      ),
     ),
   );
 }
@@ -23,14 +37,24 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: LoginScreen(),
-      theme: AppTheme.light,
-      // Parámetros para inicializar EasyLocalization //
-      localizationsDelegates: context.localizationDelegates,
-      supportedLocales: context.supportedLocales,
-      locale: context.locale,
-      //////////////////////////////////////////////
+    return BlocListener<LanguageCubit, Locale>(
+      listener: (context, locale) {
+        // Cuando el cubit emita un nuevo locale, actualizamos EasyLocalization
+        context.setLocale(locale);
+      },
+      child: BlocBuilder<LanguageCubit, Locale>(
+        builder: (context, localeState) {
+          return MaterialApp(
+            home: LoginScreen(),
+            theme: AppTheme.light,
+            // Parámetros para inicializar EasyLocalization //
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: localeState, // El locale actual se obtiene del cubit
+            //////////////////////////////////////////////
+          );
+        },
+      ),
     );
   }
 }

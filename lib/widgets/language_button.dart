@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:clima_solid/cubits/language_cubit.dart';
 
+/// Widget que muestra un dropdown para cambiar el idioma de la app
+/// Utiliza LanguageCubit para gestionar el estado
 class LanguageButton extends StatefulWidget {
   const LanguageButton({super.key});
 
@@ -8,14 +12,13 @@ class LanguageButton extends StatefulWidget {
 }
 
 class _LanguageButtonState extends State<LanguageButton> {
-  String _selectedLanguage = 'en';
-
   @override
   Widget build(BuildContext context) {
+    final cubit = context.watch<LanguageCubit>();
+    final currentCode = cubit.state.languageCode;
     return DropdownButtonHideUnderline(
       child: DropdownButton<String>(
-        value: _selectedLanguage,
-        dropdownColor: Colors.blue[100],
+        value: currentCode,
         icon: Padding(
           padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
           child: Icon(
@@ -25,9 +28,7 @@ class _LanguageButtonState extends State<LanguageButton> {
         ),
         onChanged: (value) {
           if (value != null) {
-            setState(() {
-              _selectedLanguage = value;
-            });
+            cubit.changeLanguage(value);
           }
         },
         items: [
