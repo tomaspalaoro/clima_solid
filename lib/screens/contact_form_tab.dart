@@ -22,6 +22,30 @@ class _ContactFormTabState extends State<ContactFormTab> {
   final _phoneCtrl = TextEditingController();
   DateTime? _selectedDate;
 
+  bool _isFormFilled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameCtrl.addListener(_onFieldChanged);
+    _dateCtrl.addListener(_onFieldChanged);
+    _cityCtrl.addListener(_onFieldChanged);
+    _emailCtrl.addListener(_onFieldChanged);
+    _phoneCtrl.addListener(_onFieldChanged);
+  }
+
+  void _onFieldChanged() {
+    final filled =
+        _nameCtrl.text.isNotEmpty &&
+        _selectedDate != null &&
+        _cityCtrl.text.isNotEmpty &&
+        _emailCtrl.text.isNotEmpty &&
+        _phoneCtrl.text.isNotEmpty;
+    if (filled != _isFormFilled) {
+      setState(() => _isFormFilled = filled);
+    }
+  }
+
   @override
   void dispose() {
     _nameCtrl.dispose();
@@ -45,6 +69,8 @@ class _ContactFormTabState extends State<ContactFormTab> {
       _dateCtrl.text = DateFormat.yMMMd(
         context.locale.toString(),
       ).format(picked);
+      //
+      _onFieldChanged();
     }
   }
 
@@ -116,7 +142,10 @@ class _ContactFormTabState extends State<ContactFormTab> {
               ],
             ),
             const SizedBox(height: 24),
-            FilledButton(onPressed: _submit, child: Text(tr('send'))),
+            FilledButton(
+              onPressed: _isFormFilled ? _submit : null,
+              child: Text(tr('send')),
+            ),
           ],
         ),
       ),
