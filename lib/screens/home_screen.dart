@@ -1,3 +1,4 @@
+import 'package:clima_solid/services/contact_service.dart';
 import 'package:clima_solid/widgets/language_button.dart';
 import 'package:clima_solid/screens/city_weather_tab.dart';
 import 'package:clima_solid/screens/contact_form_tab.dart';
@@ -47,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         controller: _tabController,
         children: [
           ..._cities.map((city) => CityWeatherTab(city: city)),
-          const ContactFormTab(),
+          ContactFormTab(contactService: FakeContactService()),
         ],
       ),
     );

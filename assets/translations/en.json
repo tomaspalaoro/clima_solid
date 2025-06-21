@@ -8,5 +8,13 @@
     "enter_email": "Enter email",
     "required_field": "This field is required",
     "invalid_email": "Invalid email",
-    "contact": "Contact"
+    "contact": "Contact",
+    "invalid_phone": "Invalid phone number",
+    "sent_success": "Contact sent successfully",
+    "contact_name": "Contact name",
+    "contact_birthdate": "Birthdate",
+    "contact_city": "City",
+    "contact_email": "Email",
+    "contact_phone": "Phone",
+    "send": "Send"
 }

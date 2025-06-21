@@ -8,5 +8,13 @@
     "enter_email": "Introduce tu correo electrónico",
     "required_field": "Este campo es obligatorio",
     "invalid_email": "Introduce un correo válido",
-    "contact": "Contacto"
+    "contact": "Contacto",
+    "invalid_phone": "Introduce un número de teléfono válido",
+    "sent_success": "Contacto enviado correctamente",
+    "contact_name": "Nombre de contacto",
+    "contact_birthdate": "Fecha de nacimiento",
+    "contact_city": "Ciudad",
+    "contact_email": "Email",
+    "contact_phone": "Teléfono",
+    "send": "Enviar"
 }
