@@ -1,3 +1,4 @@
+import 'package:clima_solid/blocs/contact_form_cubit.dart';
 import 'package:clima_solid/services/contact_service.dart';
 import 'package:clima_solid/utils/date_formatter.dart';
 import 'package:clima_solid/widgets/language_button.dart';
@@ -59,6 +60,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
+    final contactService = context.read<ContactService>();
+    final dateFormatter = EasyDateFormatter();
+
     return Scaffold(
       appBar: AppBar(
         // fecha de hoy
@@ -89,9 +93,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         controller: _tabController,
         children: [
           ..._cities.map((c) => CityWeatherTab(city: c.name)),
-          ContactFormTab(
-            contactService: FakeContactService(),
-            dateFormatter: EasyDateFormatter(),
+          BlocProvider(
+            create: (_) => ContactFormCubit(contactService: contactService),
+            child: ContactFormTab(dateFormatter: dateFormatter),
           ),
         ],
       ),

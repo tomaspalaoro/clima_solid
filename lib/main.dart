@@ -1,4 +1,5 @@
 import 'package:clima_solid/repositories/weather_repository.dart';
+import 'package:clima_solid/services/contact_service.dart';
 import 'package:clima_solid/utils/forecast_filter.dart';
 import 'package:clima_solid/views/login_screen.dart';
 import 'package:clima_solid/repositories/city_repository.dart';
@@ -27,11 +28,13 @@ void main() async {
             filter: ForecastFilter(),
           );
           final CityRepository cityRepository = LocalCityRepository();
+          final ContactService contactService = FakeContactService();
           //
           return MultiRepositoryProvider(
             providers: [
               RepositoryProvider.value(value: weatherRepository),
               RepositoryProvider.value(value: cityRepository),
+              RepositoryProvider.value(value: contactService),
             ],
             child: const MainApp(),
           );
