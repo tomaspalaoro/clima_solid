@@ -28,3 +28,17 @@ class OpenWeatherRepository implements WeatherRepository {
     return filter.filterForCurrentDay(hours);
   }
 }
+
+class FakeWeatherRepository implements WeatherRepository {
+  final List<HourWeather> data;
+
+  FakeWeatherRepository(this.data);
+
+  @override
+  Future<List<HourWeather>> getHourlyForecast({
+    required String city,
+    required String lang,
+  }) async {
+    return Future.value(data);
+  }
+}
