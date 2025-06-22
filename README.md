@@ -1,6 +1,6 @@
 # Clima SOLID (Prueba técnica)
 
-Pequeña aplicación Flutter que permite consultar el clima por horas en distintas ciudades a través de la API de OpenWeatherMap.
+Pequeña aplicación Flutter que permite consultar el clima (en intervalos de tres horas) de distintas ciudades a través de la API de [OpenWeatherMap](https://openweathermap.org/).
 
 ## Características
 
@@ -69,9 +69,15 @@ Este proyecto incluye tests unitarios.
 En 'login_test.dart' se comprueba la validación de email y contraseña, el flujo de envío exitoso y el manejo de errores.
 En 'weather_test.dart' se verifica el comportamiento en casos exitosos y fallidos al obtener datos meteorológicos. También la correcta deserialización del JSON proporcionado por la API de OpenWeatherMap.
 
+## Notas
+
+- El token de API de OpenWeatherMap está incluido en el código fuente para facilitar la configuración, ya que es una clave gratuita y limitada.
+- La organización de carpetas actualmente separa responsabilidades por tipo de archivo. En apps grandes podría evolucionar a organización por features.
+
 ## Posibles mejoras futuras
 
 - Autenticación de usuarios
+- Token de API protegido mediante variables de entorno
 - Separación de lógica de retry del service
 - Cacheado de imágenes
 - Buscador de ciudades
