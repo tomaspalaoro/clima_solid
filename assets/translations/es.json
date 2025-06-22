@@ -17,5 +17,7 @@
     "contact_email": "Email",
     "contact_phone": "Teléfono",
     "send": "Enviar",
-    "retry": "Reintentar"
+    "retry": "Reintentar",
+    "min": "Mín",
+    "max": "Máx"
 }

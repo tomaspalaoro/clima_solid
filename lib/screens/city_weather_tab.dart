@@ -1,5 +1,6 @@
 import 'package:clima_solid/cubits/weather_cubit.dart';
 import 'package:clima_solid/cubits/weather_state.dart';
+import 'package:clima_solid/widgets/weather_info.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -125,40 +126,10 @@ class _WeatherView extends StatelessWidget {
               child: ListView.builder(
                 physics: const AlwaysScrollableScrollPhysics(),
                 itemCount: loadedHours.length,
+                padding: const EdgeInsets.symmetric(vertical: 10),
                 itemBuilder: (context, index) {
                   final h = loadedHours[index];
-                  return Row(
-                    children: [
-                      Image.network(
-                        h.iconUrl,
-                        height: 100,
-                        width: 100,
-                        errorBuilder: (context, error, stackTrace) {
-                          return const Icon(
-                            Icons.image_not_supported_outlined,
-                            size: 100,
-                          );
-                        },
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '${h.dateTime.hour.toString().padLeft(2, '0')}:00 — ${h.temp.toStringAsFixed(1)}°',
-                              style: Theme.of(context).textTheme.titleLarge,
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              h.description,
-                              style: const TextStyle(fontSize: 14),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
+                  return WeatherInfo(hourWeather: h);
                 },
               ),
             ),
