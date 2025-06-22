@@ -96,7 +96,7 @@ class _LoginView extends StatelessWidget {
                               state.status != LoginStatus.submitting
                                   ? () {
                                     // Llama al cubit para enviar el formulario
-                                    cubit.submit(context);
+                                    cubit.submit();
                                   }
                                   : null,
                           child:

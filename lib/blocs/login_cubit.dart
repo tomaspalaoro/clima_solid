@@ -20,7 +20,7 @@ class LoginCubit extends Cubit<LoginState> {
       emit(state.copyWith(obscurePassword: !state.obscurePassword));
 
   /// Envía el formulario de inicio de sesión
-  Future<void> submit(BuildContext context) async {
+  Future<void> submit() async {
     // Comprobar errores
     final emailError = FormValidator.validateEmail(state.email);
     final passwordError = FormValidator.validatePassword(state.password);
