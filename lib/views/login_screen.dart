@@ -1,5 +1,6 @@
 import 'package:clima_solid/blocs/login_cubit.dart';
 import 'package:clima_solid/blocs/login_state.dart';
+import 'package:clima_solid/services/login_service.dart';
 import 'package:clima_solid/widgets/language_button.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,10 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(create: (_) => LoginCubit(), child: const _LoginView());
+    return BlocProvider(
+      create: (_) => LoginCubit(loginService: FakeLoginService()),
+      child: const _LoginView(),
+    );
   }
 }
 
