@@ -8,12 +8,11 @@ Pequeña aplicación Flutter que permite consultar el clima por horas en distint
 - Gestión de estado con Bloc/Cubits
 - Integración de idiomas con EasyLocalization
 
-### Pantalla principal
-
-![Home](assets/screenshots/home.png)
+## Capturas
+ <img src="assets/screenshots/home.png" width="300" alt="Home">
 
 ## Estructura
-
+```text
 lib/
 ├── main.dart            # Configuración de EasyLocalization, MultiProvider y MaterialApp
 ├── theme.dart           # Definición de colores y estilos globales
@@ -49,9 +48,9 @@ lib/
 └── utils/               # Funciones de apoyo
     ├── form_validator.dart
     └── date_formatter.dart
+```
 
-
-## Posibles mejoras
+## Posibles mejoras futuras
 
 - Autenticación de usuarios
 - Separación de lógica de retry del service
