@@ -71,13 +71,12 @@ En 'weather_test.dart' se verifica el comportamiento en casos exitosos y fallido
 
 ## Notas
 
-- El token de API de OpenWeatherMap está incluido en el código fuente para facilitar la configuración, ya que es una clave gratuita y limitada.
-- La organización de carpetas actualmente separa responsabilidades por tipo de archivo. En apps grandes podría evolucionar a organización por features.
+- **IMPORTANTE**: El token gratuito de la API está visible para facilitar la ejecución inmediata. En un entorno de producción, este token debe **almacenarse de forma segura** (por ejemplo, usando variables de entorno)
+- La organización de carpetas actualmente separa responsabilidades por tipo de archivo. En producción podría evolucionar a organización por features.
 
 ## Posibles mejoras futuras
 
-- Autenticación de usuarios
-- Token de API protegido mediante variables de entorno
+- Autenticación de usuarios desde base de datos
 - Separación de lógica de retry del service
 - Cacheado de imágenes
 - Buscador de ciudades
