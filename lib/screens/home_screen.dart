@@ -61,13 +61,26 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
     return Scaffold(
       appBar: AppBar(
+        // fecha de hoy
+        title: Text(
+          EasyDateFormatter().format(DateTime.now(), context.locale),
+          style: Theme.of(
+            context,
+          ).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.secondary),
+        ),
+        centerTitle: true,
         actions: [LanguageButton(), LogoutButton()],
         bottom: TabBar(
           controller: _tabController,
           isScrollable: true,
           tabs: [
             // genera las tabs dinámicamente
-            ..._cities.map((c) => Tab(text: c.displayName)),
+            ..._cities.map(
+              (c) => Tab(
+                text: c.displayName,
+                icon: Icon(Icons.location_pin, size: 20),
+              ),
+            ),
             Tab(text: tr('contact')),
           ],
         ),

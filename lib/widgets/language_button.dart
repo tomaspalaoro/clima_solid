@@ -11,7 +11,13 @@ class LanguageButton extends StatelessWidget {
     return DropdownButtonHideUnderline(
       child: DropdownButton<String>(
         value: code,
-        icon: const Icon(Icons.language),
+        icon: Padding(
+          padding: const EdgeInsets.fromLTRB(3, 0, 0, 0),
+          child: Icon(
+            Icons.language,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+        ),
         onChanged: (newCode) {
           if (newCode != null) {
             context.setLocale(Locale(newCode));
