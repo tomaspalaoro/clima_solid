@@ -30,26 +30,6 @@ class _ContactFormTabState extends State<ContactFormTab> {
 
   bool _isFormFilled = false;
 
-  Locale? _lastLocale;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final locale = context.locale;
-    if (_lastLocale != locale) {
-      _lastLocale = locale;
-
-      if (_selectedDate != null) {
-        _dateCtrl.text = widget.dateFormatter.format(
-          _selectedDate!,
-          context.locale,
-        );
-      }
-
-      setState(() {});
-    }
-  }
-
   @override
   void initState() {
     super.initState();

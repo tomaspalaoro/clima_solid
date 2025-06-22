@@ -19,5 +19,8 @@
     "send": "Enviar",
     "retry": "Reintentar",
     "min": "Mín",
-    "max": "Máx"
+    "max": "Máx",
+    "london": "Londres",
+    "toronto": "Toronto",
+    "singapore": "Singapur"
 }

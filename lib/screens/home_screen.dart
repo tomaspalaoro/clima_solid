@@ -6,23 +6,44 @@ import 'package:clima_solid/screens/contact_form_tab.dart';
 import 'package:clima_solid/widgets/logout_button.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:clima_solid/models/city_model.dart';
+import 'package:clima_solid/services/city_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
-
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
-  late final TabController _tabController;
+  late TabController _tabController;
+  List<City> _cities = [];
 
-  final List<String> _cities = ['Londres', 'Toronto', 'Singapur'];
+  Locale? _lastLocale;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final locale = context.locale;
+    if (_lastLocale != locale) {
+      _lastLocale = locale;
+      setState(() {});
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: _cities.length + 1, vsync: this);
+    // Arrancamos vacío y luego cargamos
+    context.read<CityRepository>().getSupportedCities().then((cities) {
+      setState(() {
+        _cities = cities;
+        _tabController = TabController(
+          length: _cities.length + 1, // +1 para el Contact tab
+          vsync: this,
+        );
+      });
+    });
   }
 
   @override
@@ -33,6 +54,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    // Mientras no esté cargado, mostramos un loader
+    if (_cities.isEmpty) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
     return Scaffold(
       appBar: AppBar(
         actions: [LanguageButton(), LogoutButton()],
@@ -40,7 +66,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           controller: _tabController,
           isScrollable: true,
           tabs: [
-            ..._cities.map((city) => Tab(text: city)),
+            // genera las tabs dinámicamente
+            ..._cities.map((c) => Tab(text: c.displayName)),
             Tab(text: tr('contact')),
           ],
         ),
@@ -48,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       body: TabBarView(
         controller: _tabController,
         children: [
-          ..._cities.map((city) => CityWeatherTab(city: city)),
+          ..._cities.map((c) => CityWeatherTab(city: c.name)),
           ContactFormTab(
             contactService: FakeContactService(),
             dateFormatter: EasyDateFormatter(),

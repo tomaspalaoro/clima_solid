@@ -1,4 +1,5 @@
 import 'package:clima_solid/screens/login_screen.dart';
+import 'package:clima_solid/services/city_service.dart';
 import 'package:clima_solid/services/weather_api_service.dart';
 import 'package:clima_solid/theme.dart';
 import 'package:flutter/material.dart';
@@ -19,12 +20,16 @@ void main() async {
         builder: (context) {
           //
           // Inicializa el repositorio compartido por toda la apps
-          final WeatherRepository repository = OpenWeatherRepository(
+          final WeatherRepository weatherRepository = OpenWeatherRepository(
             OpenWeatherApiService(),
           );
+          final CityRepository cityRepository = LocalCityRepository();
           //
-          return RepositoryProvider<WeatherRepository>.value(
-            value: repository,
+          return MultiRepositoryProvider(
+            providers: [
+              RepositoryProvider.value(value: weatherRepository),
+              RepositoryProvider.value(value: cityRepository),
+            ],
             child: const MainApp(),
           );
         },
