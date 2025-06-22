@@ -4,7 +4,6 @@ import 'package:clima_solid/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:clima_solid/cubits/language_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,8 +18,6 @@ void main() async {
       child: Builder(
         builder: (context) {
           //
-          // Inicializa el idioma actual a partir del context del Builder (que ya tiene el context de EasyLocalization)
-          final Locale initialLocale = context.locale;
           // Inicializa el repositorio compartido por toda la apps
           final WeatherRepository repository = OpenWeatherRepository(
             OpenWeatherApiService(),
@@ -28,12 +25,7 @@ void main() async {
           //
           return RepositoryProvider<WeatherRepository>.value(
             value: repository,
-            child: MultiBlocProvider(
-              providers: [
-                BlocProvider(create: (_) => LanguageCubit(initialLocale)),
-              ],
-              child: const MainApp(),
-            ),
+            child: const MainApp(),
           );
         },
       ),
@@ -46,24 +38,14 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<LanguageCubit, Locale>(
-      listener: (context, locale) {
-        // Cuando el cubit emita un nuevo locale, actualizamos EasyLocalization
-        context.setLocale(locale);
-      },
-      child: BlocBuilder<LanguageCubit, Locale>(
-        builder: (context, localeState) {
-          return MaterialApp(
-            home: LoginScreen(),
-            theme: AppTheme.light,
-            // Parámetros para inicializar EasyLocalization //
-            localizationsDelegates: context.localizationDelegates,
-            supportedLocales: context.supportedLocales,
-            locale: localeState, // El locale actual se obtiene del cubit
-            //////////////////////////////////////////////
-          );
-        },
-      ),
+    return MaterialApp(
+      home: LoginScreen(),
+      theme: AppTheme.light,
+      // Parámetros para inicializar EasyLocalization //
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
+      //////////////////////////////////////////////
     );
   }
 }

@@ -1,45 +1,25 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:clima_solid/cubits/language_cubit.dart';
 
 /// Widget que muestra un dropdown para cambiar el idioma de la app
 /// Utiliza LanguageCubit para gestionar el estado
-class LanguageButton extends StatefulWidget {
+class LanguageButton extends StatelessWidget {
   const LanguageButton({super.key});
-
-  @override
-  State<LanguageButton> createState() => _LanguageButtonState();
-}
-
-class _LanguageButtonState extends State<LanguageButton> {
   @override
   Widget build(BuildContext context) {
-    final cubit = context.watch<LanguageCubit>();
-    final currentCode = cubit.state.languageCode;
+    final code = context.locale.languageCode;
     return DropdownButtonHideUnderline(
       child: DropdownButton<String>(
-        value: currentCode,
-        icon: Padding(
-          padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
-          child: Icon(
-            Icons.language,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-        ),
-        onChanged: (value) {
-          if (value != null) {
-            cubit.changeLanguage(value);
+        value: code,
+        icon: const Icon(Icons.language),
+        onChanged: (newCode) {
+          if (newCode != null) {
+            context.setLocale(Locale(newCode));
           }
         },
-        items: [
-          DropdownMenuItem(
-            value: 'en',
-            child: Text('EN', style: Theme.of(context).textTheme.titleSmall),
-          ),
-          DropdownMenuItem(
-            value: 'es',
-            child: Text('ES', style: Theme.of(context).textTheme.titleSmall),
-          ),
+        items: const [
+          DropdownMenuItem(value: 'en', child: Text('EN')),
+          DropdownMenuItem(value: 'es', child: Text('ES')),
         ],
       ),
     );

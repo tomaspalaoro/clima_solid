@@ -1,8 +1,8 @@
 import 'package:clima_solid/cubits/weather_cubit.dart';
 import 'package:clima_solid/cubits/weather_state.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:clima_solid/cubits/language_cubit.dart';
 import 'package:clima_solid/services/weather_api_service.dart';
 
 /// Widget para mostrar el clima por horas de una ciudad
@@ -24,39 +24,38 @@ class _CityWeatherTabState extends State<CityWeatherTab>
   bool _isInitialized = false;
 
   late WeatherCubit weatherCubit;
-  late String currentLang;
+  late String _lastLangCode;
 
   @override
   void didChangeDependencies() {
-    if (_isInitialized) return;
     super.didChangeDependencies();
-    // Inicializar WeatherCubit
-    final WeatherRepository weatherRepository =
-        context.read<WeatherRepository>();
-    weatherCubit = WeatherCubit(weatherRepository);
 
-    // Traer lista de horas al estado inicial
-    currentLang = context.read<LanguageCubit>().state.languageCode;
-    weatherCubit.fetchForecast(city: widget.city, lang: currentLang);
-    _isInitialized = true;
+    // Inicialización única
+    if (!_isInitialized) {
+      final repo = context.read<WeatherRepository>();
+      weatherCubit = WeatherCubit(repo);
+
+      // Primer fetch usando el locale actual
+      _lastLangCode = context.locale.languageCode;
+      weatherCubit.fetchForecast(city: widget.city, lang: _lastLangCode);
+
+      _isInitialized = true;
+    } else {
+      // Si ya inicializamos, miramos si cambió el idioma y re-fetch
+      final newCode = context.locale.languageCode;
+      if (newCode != _lastLangCode) {
+        _lastLangCode = newCode;
+        weatherCubit.fetchForecast(city: widget.city, lang: newCode);
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return BlocListener<LanguageCubit, Locale>(
-      listener: (context, newLocale) {
-        // Si cambia de idioma, traer listado otra vez.
-        // No recarga los widgets, solo dispara la lógica y actualiza los estados
-        if (newLocale.languageCode != currentLang) {
-          currentLang = newLocale.languageCode;
-          weatherCubit.fetchForecast(city: widget.city, lang: currentLang);
-        }
-      },
-      child: BlocProvider.value(
-        value: weatherCubit,
-        child: _WeatherView(city: widget.city),
-      ),
+    return BlocProvider.value(
+      value: weatherCubit,
+      child: _WeatherView(city: widget.city),
     );
   }
 
@@ -99,7 +98,7 @@ class _WeatherView extends StatelessWidget {
         if (state is WeatherLoaded) {
           final loadedHours = state.hoursList;
           final weatherCubit = context.read<WeatherCubit>();
-          final lang = context.read<LanguageCubit>().state.languageCode;
+          final lang = context.locale.languageCode;
 
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -118,7 +117,10 @@ class _WeatherView extends StatelessWidget {
                         height: 100,
                         width: 100,
                         errorBuilder: (context, error, stackTrace) {
-                          return const Icon(Icons.image_not_supported_outlined, size: 100);
+                          return const Icon(
+                            Icons.image_not_supported_outlined,
+                            size: 100,
+                          );
                         },
                       ),
                       const SizedBox(width: 16),
