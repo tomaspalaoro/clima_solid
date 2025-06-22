@@ -4,9 +4,16 @@ Pequeña aplicación Flutter que permite consultar el clima por horas en distint
 
 ## Características
 
-- Arquitectura SOLID
 - Gestión de estado con Bloc/Cubits
 - Integración de idiomas con EasyLocalization
+- Validación de formulario
+
+## Principios SOLID
+
+Cada clase tiene una única responsabilidad. Los Cubits gestionan exclusivamente el estado y la lógica de presentación, los servicios manejan las llamadas a la API o tareas de infraestructura, los repositorios encapsulan la lógica de negocio, y las vistas y widgets se encargan únicamente de mostrar la interfaz de usuario.
+La app se puede extender sin necesidad de modificar las clases existentes. 
+Las clases pueden ser reemplazadas por otras que implementen la misma interfaz sin afectar el comportamiento de la app.
+Las clases solo dependen de lo que realmente necesitan, sin implementaciones innecesarias.
 
 ## Capturas
  <img src="assets/screenshots/home.png" width="300" alt="Home">
@@ -19,7 +26,11 @@ lib/
 
 ├── blocs/               # Gestión de estado
 │   ├── weather_cubit.dart
-│   └── weather_state.dart
+│   ├── weather_state.dart
+│   ├── login_cubit.dart
+│   ├── login_state.dart
+│   ├── contact_form_state.dart
+│   └── contact_form_cubit.dart
 
 ├── models/              # Entidades de dominio y mapeos JSON
 │   ├── city_model.dart
@@ -32,7 +43,8 @@ lib/
 
 ├── services/            # llamadas HTTP, servicios de infraestructura
 │   ├── weather_api_service.dart
-│   └── contact_service.dart
+│   ├── contact_service.dart
+│   └── login_service.dart
 
 ├── views/               # Pantallas de la app
 │   ├── login_screen.dart
