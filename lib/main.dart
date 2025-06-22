@@ -1,6 +1,7 @@
-import 'package:clima_solid/screens/login_screen.dart';
-import 'package:clima_solid/services/city_service.dart';
-import 'package:clima_solid/services/weather_api_service.dart';
+import 'package:clima_solid/repositories/weather_repository.dart';
+import 'package:clima_solid/views/login_screen.dart';
+import 'package:clima_solid/repositories/city_repository.dart';
+import 'package:clima_solid/services/openweather_api_service.dart';
 import 'package:clima_solid/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';

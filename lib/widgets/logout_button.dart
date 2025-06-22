@@ -1,4 +1,4 @@
-import 'package:clima_solid/screens/login_screen.dart';
+import 'package:clima_solid/views/login_screen.dart';
 import 'package:flutter/material.dart';
 
 class LogoutButton extends StatelessWidget {

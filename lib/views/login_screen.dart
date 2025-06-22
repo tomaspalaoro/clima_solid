@@ -1,4 +1,4 @@
-import 'package:clima_solid/screens/home_screen.dart';
+import 'package:clima_solid/views/home_screen.dart';
 import 'package:clima_solid/utils/form_validator.dart';
 import 'package:clima_solid/widgets/language_button.dart';
 import 'package:easy_localization/easy_localization.dart';

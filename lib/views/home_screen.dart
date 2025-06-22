@@ -1,14 +1,14 @@
 import 'package:clima_solid/services/contact_service.dart';
 import 'package:clima_solid/utils/date_formatter.dart';
 import 'package:clima_solid/widgets/language_button.dart';
-import 'package:clima_solid/screens/city_weather_tab.dart';
-import 'package:clima_solid/screens/contact_form_tab.dart';
+import 'package:clima_solid/views/city_weather_tab.dart';
+import 'package:clima_solid/views/contact_form_tab.dart';
 import 'package:clima_solid/widgets/logout_button.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:clima_solid/models/city_model.dart';
-import 'package:clima_solid/services/city_service.dart';
+import 'package:clima_solid/repositories/city_repository.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -64,9 +64,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         // fecha de hoy
         title: Text(
           EasyDateFormatter().format(DateTime.now(), context.locale),
-          style: Theme.of(
-            context,
-          ).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.secondary),
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            color: Theme.of(context).colorScheme.secondary,
+          ),
         ),
         centerTitle: true,
         actions: [LanguageButton(), LogoutButton()],

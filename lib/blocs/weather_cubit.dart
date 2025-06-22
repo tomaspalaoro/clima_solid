@@ -1,5 +1,5 @@
+import 'package:clima_solid/repositories/weather_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:clima_solid/services/weather_api_service.dart';
 import 'weather_state.dart';
 
 class WeatherCubit extends Cubit<WeatherState> {
