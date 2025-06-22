@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 
 enum LoginStatus { initial, submitting, success, failure }
 
+/// Estado del cubit de login
 class LoginState extends Equatable {
   final String email;
   final String password;
