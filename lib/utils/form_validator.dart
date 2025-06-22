@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 
-class ContactValidator {
+class FormValidator {
   static String? validateName(String? v) =>
       (v == null || v.isEmpty) ? tr('required_field') : null;
 
@@ -18,5 +18,10 @@ class ContactValidator {
   static String? validatePhone(String? v) {
     if (v == null || v.isEmpty) return tr('required_field');
     return v.length < 9 ? tr('invalid_phone') : null;
+  }
+
+  static String? validatePassword(String? v) {
+    if (v == null || v.isEmpty) return tr('required_field');
+    return null;
   }
 }

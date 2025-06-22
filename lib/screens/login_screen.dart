@@ -1,4 +1,5 @@
 import 'package:clima_solid/screens/home_screen.dart';
+import 'package:clima_solid/utils/form_validator.dart';
 import 'package:clima_solid/widgets/language_button.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
@@ -58,15 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     hint: tr('enter_email'),
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return tr('required_field');
-                      }
-                      if (!value.contains('@')) {
-                        return tr('invalid_email');
-                      }
-                      return null;
-                    },
+                    validator: FormValidator.validateEmail,
                   ),
                   const SizedBox(height: 20.0),
                   _buildTextField(
@@ -78,12 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     toggleObscure: () {
                       setState(() => _obscurePassword = !_obscurePassword);
                     },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return tr('required_field');
-                      }
-                      return null;
-                    },
+                    validator: FormValidator.validatePassword,
                   ),
                   const SizedBox(height: 30.0),
                   SizedBox(

@@ -1,13 +1,19 @@
 import 'package:clima_solid/models/contact_model.dart';
 import 'package:clima_solid/services/contact_service.dart';
-import 'package:clima_solid/validators/contact_validator.dart';
+import 'package:clima_solid/utils/form_validator.dart';
+import 'package:clima_solid/utils/date_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class ContactFormTab extends StatefulWidget {
   final ContactService contactService;
+  final DateFormatter dateFormatter;
 
-  const ContactFormTab({super.key, required this.contactService});
+  const ContactFormTab({
+    super.key,
+    required this.contactService,
+    required this.dateFormatter,
+  });
 
   @override
   State<ContactFormTab> createState() => _ContactFormTabState();
@@ -23,6 +29,26 @@ class _ContactFormTabState extends State<ContactFormTab> {
   DateTime? _selectedDate;
 
   bool _isFormFilled = false;
+
+  Locale? _lastLocale;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final locale = context.locale;
+    if (_lastLocale != locale) {
+      _lastLocale = locale;
+
+      if (_selectedDate != null) {
+        _dateCtrl.text = widget.dateFormatter.format(
+          _selectedDate!,
+          context.locale,
+        );
+      }
+
+      setState(() {});
+    }
+  }
 
   @override
   void initState() {
@@ -66,9 +92,8 @@ class _ContactFormTabState extends State<ContactFormTab> {
     );
     if (picked != null) {
       _selectedDate = picked;
-      _dateCtrl.text = DateFormat.yMMMd(
-        context.locale.toString(),
-      ).format(picked);
+      if (!mounted) return;
+      _dateCtrl.text = widget.dateFormatter.format(picked, context.locale);
       //
       _onFieldChanged();
     }
@@ -106,7 +131,7 @@ class _ContactFormTabState extends State<ContactFormTab> {
                 TextFormField(
                   controller: _nameCtrl,
                   decoration: InputDecoration(labelText: tr('contact_name')),
-                  validator: ContactValidator.validateName,
+                  validator: FormValidator.validateName,
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
@@ -117,27 +142,27 @@ class _ContactFormTabState extends State<ContactFormTab> {
                   ),
                   onTap: _pickDate,
                   validator:
-                      (_) => ContactValidator.validateBirthDate(_selectedDate),
+                      (_) => FormValidator.validateBirthDate(_selectedDate),
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: _cityCtrl,
                   decoration: InputDecoration(labelText: tr('contact_city')),
-                  validator: ContactValidator.validateCity,
+                  validator: FormValidator.validateCity,
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: _emailCtrl,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(labelText: tr('contact_email')),
-                  validator: ContactValidator.validateEmail,
+                  validator: FormValidator.validateEmail,
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: _phoneCtrl,
                   keyboardType: TextInputType.phone,
                   decoration: InputDecoration(labelText: tr('contact_phone')),
-                  validator: ContactValidator.validatePhone,
+                  validator: FormValidator.validatePhone,
                 ),
               ],
             ),
