@@ -130,7 +130,7 @@ class _WeatherView extends StatelessWidget {
                   return Row(
                     children: [
                       Image.network(
-                        'https://openweathermap.org/img/wn/${h.iconId}@2x.png',
+                        h.iconUrl,
                         height: 100,
                         width: 100,
                         errorBuilder: (context, error, stackTrace) {

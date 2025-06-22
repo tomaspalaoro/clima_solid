@@ -1,3 +1,4 @@
+/// Modelo de objeto que devuelve la API de OpenWeatherMap.
 /// Representa el clima en una hora concreta
 class HourWeather {
   /// Fecha y hora de la medición
@@ -17,6 +18,8 @@ class HourWeather {
 
   /// Identificador de la url del icono del clima actual
   final String iconId;
+
+  String get iconUrl => 'https://openweathermap.org/img/wn/$iconId@2x.png';
 
   HourWeather({
     required this.dateTime,

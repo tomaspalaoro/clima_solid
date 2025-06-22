@@ -65,15 +65,19 @@ class OpenWeatherApiService {
 
         List<HourWeather> hours = [];
         for (var hour in json['list']) {
-          final forecastTime = DateTime.parse(hour['dt_txt']);
-          final forecastDate = DateTime(
-            forecastTime.year,
-            forecastTime.month,
-            forecastTime.day,
-          );
-
-          if (!currentDayOnly || forecastDate == today) {
-            hours.add(HourWeather.fromJson(hour));
+          final HourWeather hourWeather = HourWeather.fromJson(hour);
+          if (!currentDayOnly) {
+            hours.add(hourWeather);
+          } else {
+            // Filtra solo el día actual
+            final forecastDate = DateTime(
+              hourWeather.dateTime.year,
+              hourWeather.dateTime.month,
+              hourWeather.dateTime.day,
+            );
+            if (forecastDate == today) {
+              hours.add(hourWeather);
+            }
           }
         }
 
