@@ -2,6 +2,7 @@ part of 'contact_form_cubit.dart';
 
 enum ContactFormStatus { initial, valid, submitting, success, failure }
 
+/// Estado del cubit de contacto
 class ContactFormState extends Equatable {
   final String name;
   final DateTime? birthDate;
@@ -9,6 +10,7 @@ class ContactFormState extends Equatable {
   final String email;
   final String phone;
   final ContactFormStatus status;
+  final Map<String, String?> fieldErrors;
 
   const ContactFormState({
     required this.name,
@@ -17,22 +19,30 @@ class ContactFormState extends Equatable {
     required this.email,
     required this.phone,
     required this.status,
+    required this.fieldErrors,
   });
 
   factory ContactFormState.initial() {
     return const ContactFormState(
-      name: '', birthDate: null, city: '', email: '', phone: '', status: ContactFormStatus.initial
+      name: '',
+      birthDate: null,
+      city: '',
+      email: '',
+      phone: '',
+      status: ContactFormStatus.initial,
+      fieldErrors: {},
     );
   }
 
-  bool get canSubmit {
-    return name.isNotEmpty && birthDate != null && city.isNotEmpty &&
-           email.isNotEmpty && phone.isNotEmpty;
-  }
+  bool get canSubmit =>
+      name.isNotEmpty &&
+      birthDate != null &&
+      city.isNotEmpty &&
+      email.isNotEmpty &&
+      phone.isNotEmpty &&
+      fieldErrors.values.every((e) => e == null);
 
-  @override
-  List<Object?> get props => [name, birthDate, city, email, phone, status];
-
+  /// Crea una copia del estado con los valores proporcionados
   ContactFormState copyWith({
     String? name,
     DateTime? birthDate,
@@ -40,15 +50,27 @@ class ContactFormState extends Equatable {
     String? email,
     String? phone,
     ContactFormStatus? status,
+    Map<String, String?>? fieldErrors,
   }) {
-    final newBirthDate = birthDate ?? this.birthDate;
     return ContactFormState(
       name: name ?? this.name,
-      birthDate: newBirthDate,
+      birthDate: birthDate ?? this.birthDate,
       city: city ?? this.city,
       email: email ?? this.email,
       phone: phone ?? this.phone,
-      status: status ?? (canSubmit ? ContactFormStatus.valid : ContactFormStatus.initial),
+      status: status ?? this.status,
+      fieldErrors: fieldErrors ?? this.fieldErrors,
     );
   }
+
+  @override
+  List<Object?> get props => [
+    name,
+    birthDate,
+    city,
+    email,
+    phone,
+    status,
+    fieldErrors,
+  ];
 }
