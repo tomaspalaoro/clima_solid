@@ -39,26 +39,52 @@ class OpenWeatherApiService {
   Future<List<HourWeather>> fetchOpenWeatherForecast({
     required String city,
     required String lang,
+    bool currentDayOnly = true,
   }) async {
-    final uri = Uri.https(_baseUrl, '/data/2.5/forecast', {
-      'q': city,
-      'appid': _apiKey,
-      'units': 'metric',
-      'lang': lang,
-    });
+    const int maxRetries = 2;
+    const Duration retryDelay = Duration(seconds: 2);
+    int attempt = 0;
 
-    final response = await httpClient.get(uri);
-    if (response.statusCode != 200) {
-      throw Exception(
-        'Error al cargar datos del clima: ${response.statusCode} ${response.body}',
-      );
-    }
+    while (true) {
+      try {
+        final uri = Uri.https(_baseUrl, '/data/2.5/forecast', {
+          'q': city,
+          'appid': _apiKey,
+          'units': 'metric',
+          'lang': lang,
+        });
 
-    final Map<String, dynamic> json = jsonDecode(response.body);
-    List<HourWeather> hours = [];
-    for (var hour in json['list']) {
-      hours.add(HourWeather.fromJson(hour));
+        final response = await httpClient.get(uri);
+        if (response.statusCode != 200) {
+          throw (response.body);
+        }
+
+        final Map<String, dynamic> json = jsonDecode(response.body);
+        final now = DateTime.now();
+        final today = DateTime(now.year, now.month, now.day);
+
+        List<HourWeather> hours = [];
+        for (var hour in json['list']) {
+          final forecastTime = DateTime.parse(hour['dt_txt']);
+          final forecastDate = DateTime(
+            forecastTime.year,
+            forecastTime.month,
+            forecastTime.day,
+          );
+
+          if (!currentDayOnly || forecastDate == today) {
+            hours.add(HourWeather.fromJson(hour));
+          }
+        }
+
+        return hours;
+      } catch (e) {
+        attempt++;
+        if (attempt >= maxRetries) {
+          return Future.error("Couldn't load weather data: $e");
+        }
+        await Future.delayed(retryDelay);
+      }
     }
-    return hours;
   }
 }

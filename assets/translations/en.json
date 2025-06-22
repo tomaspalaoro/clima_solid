@@ -16,5 +16,6 @@
     "contact_city": "City",
     "contact_email": "Email",
     "contact_phone": "Phone",
-    "send": "Send"
+    "send": "Send",
+    "retry": "Retry"
 }

@@ -71,8 +71,8 @@ class _WeatherView extends StatelessWidget {
 
   const _WeatherView({required this.city});
 
-  /// Refresca los datos al arrastrar
-  Future<void> _pullDownRefresh(WeatherCubit weatherCubit, String lang) async {
+  /// Vuelve a cargar los datos
+  Future<void> _refresh(WeatherCubit weatherCubit, String lang) async {
     await weatherCubit.fetchForecast(city: city, lang: lang);
   }
 
@@ -85,12 +85,29 @@ class _WeatherView extends StatelessWidget {
         }
 
         if (state is WeatherError) {
-          return Center(
-            child: Text(
-              state.message,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: Theme.of(context).colorScheme.error,
-              ),
+          return Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              spacing: 5,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  state.message,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: Theme.of(context).colorScheme.error,
+                  ),
+                ),
+                OutlinedButton(
+                  onPressed: () {
+                    _refresh(
+                      context.read<WeatherCubit>(),
+                      context.locale.languageCode,
+                    );
+                  },
+                  child: Text(tr('retry')),
+                ),
+              ],
             ),
           );
         }
@@ -104,7 +121,7 @@ class _WeatherView extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: RefreshIndicator(
               // Refresca los datos al arrastrar
-              onRefresh: () => _pullDownRefresh(weatherCubit, lang),
+              onRefresh: () => _refresh(weatherCubit, lang),
               child: ListView.builder(
                 physics: const AlwaysScrollableScrollPhysics(),
                 itemCount: loadedHours.length,
