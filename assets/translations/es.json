@@ -22,5 +22,6 @@
     "max": "Máx",
     "london": "Londres",
     "toronto": "Toronto",
-    "singapore": "Singapur"
+    "singapore": "Singapur",
+    "no_data_today": "No hay datos del clima para hoy"
 }

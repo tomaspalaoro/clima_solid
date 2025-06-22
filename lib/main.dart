@@ -1,7 +1,8 @@
 import 'package:clima_solid/repositories/weather_repository.dart';
+import 'package:clima_solid/utils/forecast_filter.dart';
 import 'package:clima_solid/views/login_screen.dart';
 import 'package:clima_solid/repositories/city_repository.dart';
-import 'package:clima_solid/services/openweather_api_service.dart';
+import 'package:clima_solid/services/weather_api_service.dart';
 import 'package:clima_solid/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -22,7 +23,8 @@ void main() async {
           //
           // Inicializa el repositorio compartido por toda la apps
           final WeatherRepository weatherRepository = OpenWeatherRepository(
-            OpenWeatherApiService(),
+            apiService: OpenWeatherApiService(),
+            filter: ForecastFilter(),
           );
           final CityRepository cityRepository = LocalCityRepository();
           //
@@ -45,6 +47,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: LoginScreen(),
       theme: AppTheme.light,
       // Parámetros para inicializar EasyLocalization //

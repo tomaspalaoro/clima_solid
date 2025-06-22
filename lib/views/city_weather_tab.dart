@@ -115,6 +115,16 @@ class _WeatherView extends StatelessWidget {
 
         if (state is WeatherLoaded) {
           final loadedHours = state.hoursList;
+          if (loadedHours.isEmpty) {
+            // Si no hay datos para hoy, muestra un mensaje
+            return Center(
+              child: Text(
+                tr('no_data_today'),
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+            );
+          }
+
           final weatherCubit = context.read<WeatherCubit>();
           final lang = context.locale.languageCode;
 

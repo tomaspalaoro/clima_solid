@@ -31,7 +31,7 @@ lib/
 │   └── city_repository.dart
 
 ├── services/            # llamadas HTTP, servicios de infraestructura
-│   ├── openweather_api_service.dart
+│   ├── weather_api_service.dart
 │   └── contact_service.dart
 
 ├── views/               # Pantallas de la app
@@ -47,7 +47,8 @@ lib/
 
 └── utils/               # Funciones de apoyo
     ├── form_validator.dart
-    └── date_formatter.dart
+    ├── forecast_filter.dart 
+    └── date_formatter.dart 
 ```
 
 ## Posibles mejoras futuras
