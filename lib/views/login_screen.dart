@@ -1,39 +1,31 @@
-import 'package:clima_solid/views/home_screen.dart';
-import 'package:clima_solid/utils/form_validator.dart';
+import 'package:clima_solid/blocs/login_cubit.dart';
+import 'package:clima_solid/blocs/login_state.dart';
 import 'package:clima_solid/widgets/language_button.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// Pantalla de inicio de sesión
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider(create: (_) => LoginCubit(), child: const _LoginView());
+  }
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-  final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  bool _obscurePassword = true;
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
+class _LoginView extends StatelessWidget {
+  const _LoginView();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        actions: [
+        actions: const [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: EdgeInsets.symmetric(horizontal: 20),
             child: LanguageButton(),
           ),
         ],
@@ -47,62 +39,73 @@ class _LoginScreenState extends State<LoginScreen> {
               horizontal: 32.0,
               vertical: 100.0,
             ),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  const SizedBox(height: 20.0),
-                  _buildTitle(),
-                  const SizedBox(height: 40.0),
-                  _buildTextField(
-                    label: tr('user'),
-                    hint: tr('enter_email'),
-                    controller: _emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    validator: FormValidator.validateEmail,
-                  ),
-                  const SizedBox(height: 20.0),
-                  _buildTextField(
-                    label: tr('password'),
-                    hint: tr('enter_password'),
-                    controller: _passwordController,
-                    isPassword: true,
-                    obscureText: _obscurePassword,
-                    toggleObscure: () {
-                      setState(() => _obscurePassword = !_obscurePassword);
-                    },
-                    validator: FormValidator.validatePassword,
-                  ),
-                  const SizedBox(height: 30.0),
-                  SizedBox(
-                    width: double.infinity,
-                    child: FilledButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate() || kDebugMode) {
-                          // TODO
-                          print('Login: ${_emailController.text}');
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const HomeScreen(),
-                            ),
-                            (route) => false,
-                          );
-                        }
-                      },
-                      child: Text(
-                        tr('login'),
-                        style: Theme.of(
-                          context,
-                        ).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
+            child: BlocBuilder<LoginCubit, LoginState>(
+              builder: (context, state) {
+                final cubit = context.read<LoginCubit>();
+                return Column(
+                  children: [
+                    const SizedBox(height: 20.0),
+                    _buildTitle(context),
+                    const SizedBox(height: 40.0),
+                    // EMAIL
+                    _buildTextField(
+                      context: context,
+                      label: tr('user'),
+                      hint: tr('enter_email'),
+                      value: state.email,
+                      onChanged: cubit.emailChanged,
+                      errorText: state.emailError,
+                    ),
+                    const SizedBox(height: 20.0),
+                    // CONTRASEÑA
+                    _buildTextField(
+                      context: context,
+                      label: tr('password'),
+                      hint: tr('enter_password'),
+                      value: state.password,
+                      onChanged: cubit.passwordChanged,
+                      isPassword: true,
+                      obscureText: state.obscurePassword,
+                      toggleObscure: cubit.toggleObscure,
+                      errorText: state.passwordError,
+                    ),
+                    const SizedBox(height: 30.0),
+                    // Botón de login
+                    SizedBox(
+                      width: double.infinity,
+                      child: FilledButton(
+                        onPressed:
+                            state.status != LoginStatus.submitting
+                                ? () {
+                                  // Llama al cubit para enviar el formulario
+                                  cubit.submit(context);
+                                }
+                                : null,
+                        child:
+                            // Mostrar un indicador de carga si el estado es submitting
+                            state.status == LoginStatus.submitting
+                                ? const SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                                )
+                                : Text(
+                                  tr('login'),
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
                       ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                );
+              },
             ),
           ),
         ],
@@ -124,7 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildTitle() {
+  Widget _buildTitle(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -142,14 +145,15 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _buildTextField({
+    required BuildContext context,
     required String label,
     required String hint,
-    required TextEditingController controller,
+    required String value,
+    required ValueChanged<String> onChanged,
+    String? errorText,
     bool isPassword = false,
     bool obscureText = false,
     VoidCallback? toggleObscure,
-    TextInputType keyboardType = TextInputType.text,
-    String? Function(String?)? validator,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -162,13 +166,16 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
         const SizedBox(height: 10.0),
-        TextFormField(
-          controller: controller,
-          keyboardType: keyboardType,
+        TextField(
+          onChanged: onChanged,
           obscureText: obscureText,
-          validator: validator,
+          keyboardType:
+              isPassword
+                  ? TextInputType.visiblePassword
+                  : TextInputType.emailAddress,
           decoration: InputDecoration(
             hintText: hint,
+            errorText: errorText?.isEmpty == true ? null : errorText,
             suffixIcon:
                 isPassword
                     ? IconButton(
