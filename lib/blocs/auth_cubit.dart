@@ -29,6 +29,7 @@ class AuthCubit extends Cubit<AuthState> {
       await authService.logout();
       emit(AuthUnauthenticated());
     } catch (e) {
+      print(e);
       emit(AuthError(e.toString()));
     }
   }

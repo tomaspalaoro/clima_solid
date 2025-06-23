@@ -23,5 +23,9 @@
     "london": "London",
     "toronto": "Toronto",
     "singapore": "Singapore",
-    "no_data_today": "There's no forecast data for today"
+    "no_data_today": "There's no forecast data for today",
+    "logout": "Logout",
+    "cancel": "Cancel",
+    "accept": "Accept",
+    "logout_confirmation": "Are you sure you want to logout?"
 }

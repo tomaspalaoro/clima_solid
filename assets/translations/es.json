@@ -23,5 +23,9 @@
     "london": "Londres",
     "toronto": "Toronto",
     "singapore": "Singapur",
-    "no_data_today": "No hay datos del clima para hoy"
+    "no_data_today": "No hay datos del clima para hoy",
+    "logout": "Cerrar sesión",
+    "cancel": "Cancelar",
+    "accept": "Aceptar",
+    "logout_confirmation": "¿Estás seguro de que deseas salir?"
 }
