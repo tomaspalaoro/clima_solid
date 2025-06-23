@@ -1,5 +1,6 @@
 import 'package:clima_solid/blocs/login_cubit.dart';
 import 'package:clima_solid/blocs/login_state.dart';
+import 'package:clima_solid/services/auth_service.dart';
 import 'package:clima_solid/services/login_service.dart';
 import 'package:clima_solid/views/home_screen.dart';
 import 'package:clima_solid/widgets/language_button.dart';
@@ -13,8 +14,13 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authService = RepositoryProvider.of<AuthService>(context);
     return BlocProvider(
-      create: (_) => LoginCubit(loginService: FakeLoginService()),
+      create:
+          (_) => LoginCubit(
+            loginService: FakeLoginService(),
+            authService: authService,
+          ),
       child: const _LoginView(),
     );
   }
@@ -138,7 +144,7 @@ class _LoginView extends StatelessWidget {
       width: double.infinity,
       decoration: const BoxDecoration(
         gradient: LinearGradient(
-          colors: [ Color(0xffa7bfe8), Color(0xFF2D76FF)],
+          colors: [Color(0xffa7bfe8), Color(0xFF2D76FF)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -151,11 +157,7 @@ class _LoginView extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Image.asset(
-          'assets/weathericon.png',
-          width: 80,
-          height: 80,
-        ),
+        Image.asset('assets/weathericon.png', width: 80, height: 80),
         const SizedBox(width: 10),
         Text(
           tr('app_title'),

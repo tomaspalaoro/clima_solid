@@ -1,14 +1,16 @@
 import 'package:clima_solid/blocs/login_state.dart';
 import 'package:clima_solid/services/login_service.dart';
+import 'package:clima_solid/services/auth_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter/material.dart';
 import 'package:clima_solid/utils/form_validator.dart';
 
 /// Encargado de validar y gestionar el inicio de sesión
 class LoginCubit extends Cubit<LoginState> {
   final LoginService loginService;
+  final AuthService authService;
 
-  LoginCubit({required this.loginService}) : super(LoginState.initial());
+  LoginCubit({required this.loginService, required this.authService})
+    : super(LoginState.initial());
 
   void emailChanged(String value) =>
       emit(state.copyWith(email: value.trim(), emailError: null));
@@ -40,8 +42,14 @@ class LoginCubit extends Cubit<LoginState> {
     );
 
     // Login en el servicio
-    await loginService.login(state.email, state.password);
-
+    final success = await loginService.login(state.email, state.password);
+    if (!success) {
+      // Fallido
+      emit(state.copyWith(status: LoginStatus.failure));
+      return;
+    }
+    // Guardar sesión
+    await authService.setLoggedEmail(state.email);
     // Emitir el estado de éxito
     emit(state.copyWith(status: LoginStatus.success));
   }

@@ -1,5 +1,6 @@
-import 'package:clima_solid/views/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:clima_solid/blocs/auth_cubit.dart';
 
 class LogoutButton extends StatelessWidget {
   const LogoutButton({super.key});
@@ -9,12 +10,7 @@ class LogoutButton extends StatelessWidget {
     return IconButton(
       icon: Icon(Icons.logout, color: Theme.of(context).colorScheme.error),
       iconSize: 20,
-      onPressed:
-          () => Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => LoginScreen()),
-            (route) => false,
-          ),
+      onPressed: () => context.read<AuthCubit>().logout(),
     );
   }
 }

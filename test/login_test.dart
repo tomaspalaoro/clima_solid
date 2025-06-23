@@ -3,22 +3,37 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:clima_solid/blocs/login_cubit.dart';
 import 'package:clima_solid/blocs/login_state.dart';
 import 'package:clima_solid/services/login_service.dart';
+import 'package:clima_solid/services/auth_service.dart';
 
-/// servicio de login falso
-class FakeLoginService implements LoginService {
+/// servicio de auth falso
+class TestAuthService implements AuthService {
+  String? storedEmail;
+
   @override
-  Future<void> login(String email, String password) async {
-    // simulamos llamada exitosa
-    return;
+  Future<String?> getLoggedEmail() async => storedEmail;
+
+  @override
+  Future<void> setLoggedEmail(String email) async {
+    storedEmail = email;
+  }
+
+  @override
+  Future<void> logout() async {
+    storedEmail = null;
   }
 }
 
 void main() {
   group('LoginCubit', () {
     late LoginCubit cubit;
+    late TestAuthService authService;
 
     setUp(() {
-      cubit = LoginCubit(loginService: FakeLoginService());
+      authService = TestAuthService();
+      cubit = LoginCubit(
+        loginService: FakeLoginService(),
+        authService: authService,
+      );
     });
 
     tearDown(() {
@@ -27,7 +42,11 @@ void main() {
 
     blocTest<LoginCubit, LoginState>(
       'emite [submitting, success] cuando el login es exitoso',
-      build: () => LoginCubit(loginService: FakeLoginService()),
+      build:
+          () => LoginCubit(
+            loginService: FakeLoginService(),
+            authService: TestAuthService(),
+          ),
       act: (cubit) async {
         cubit.emailChanged('test@example.com');
         cubit.passwordChanged('password123');
@@ -60,7 +79,11 @@ void main() {
 
     blocTest<LoginCubit, LoginState>(
       'emite error de email si el email es inválido',
-      build: () => LoginCubit(loginService: FakeLoginService()),
+      build:
+          () => LoginCubit(
+            loginService: FakeLoginService(),
+            authService: TestAuthService(),
+          ),
       act: (cubit) async {
         cubit.emailChanged('email-malo');
         cubit.passwordChanged('password123');
