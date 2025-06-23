@@ -1,12 +1,10 @@
-import 'package:clima_solid/blocs/auth_state.dart';
 import 'package:clima_solid/repositories/weather_repository.dart';
 import 'package:clima_solid/services/contact_service.dart';
 import 'package:clima_solid/utils/forecast_filter.dart';
-import 'package:clima_solid/views/home_screen.dart';
-import 'package:clima_solid/views/login_screen.dart';
 import 'package:clima_solid/repositories/city_repository.dart';
 import 'package:clima_solid/services/weather_api_service.dart';
 import 'package:clima_solid/theme.dart';
+import 'package:clima_solid/navigation/auth_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -59,25 +57,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: BlocBuilder<AuthCubit, AuthState>(
-        builder: (context, state) {
-          if (state is AuthAuthenticated) {
-            // HOME
-            return const HomeScreen();
-          } else if (state is AuthUnauthenticated) {
-            // LOGIN
-            return const LoginScreen();
-          } else if (state is AuthError) {
-            return Scaffold(
-              body: Center(child: Text('Error: ${state.message}')),
-            );
-          } else {
-            return const Scaffold(
-              body: Center(child: CircularProgressIndicator()),
-            );
-          }
-        },
-      ),
+      home: const AuthRoutes(), // Navegación según autenticación
       theme: AppTheme.light,
       // Parámetros para inicializar EasyLocalization //
       localizationsDelegates: context.localizationDelegates,

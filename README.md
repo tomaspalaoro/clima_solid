@@ -54,7 +54,12 @@ lib/
 │   ├── login_screen.dart
 │   ├── home_screen.dart
 │   ├── city_weather_tab.dart
-│   └── contact_form_tab.dart
+│   ├── contact_form_tab.dart
+│   └── splash_screen.dart
+
+
+├── navigation/          # Gestión de navegación automática
+│   └── auth_routes.dart
 
 ├── widgets/             # Componentes reutilizables
 │   ├── weather_info.dart
