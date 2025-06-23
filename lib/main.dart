@@ -13,32 +13,28 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Inicializar EasyLocalization
   await EasyLocalization.ensureInitialized();
+
+  // Inicializar los repositorios compartidos por toda la app
+  final WeatherRepository weatherRepository = OpenWeatherRepository(
+    apiService: OpenWeatherApiService(),
+    filter: ForecastFilter(),
+  );
+  final CityRepository cityRepository = LocalCityRepository();
+  final ContactService contactService = FakeContactService();
+  //
   runApp(
     // Es importante que toda la app tenga acceso a la localización antes de que se construyan los providers
     EasyLocalization(
       supportedLocales: const [Locale('en'), Locale('es')],
       path: 'assets/translations',
       fallbackLocale: const Locale('en'),
-      child: Builder(
-        builder: (context) {
-          //
-          // Inicializa el repositorio compartido por toda la apps
-          final WeatherRepository weatherRepository = OpenWeatherRepository(
-            apiService: OpenWeatherApiService(),
-            filter: ForecastFilter(),
-          );
-          final CityRepository cityRepository = LocalCityRepository();
-          final ContactService contactService = FakeContactService();
-          //
-          return MultiRepositoryProvider(
-            providers: [
-              RepositoryProvider.value(value: weatherRepository),
-              RepositoryProvider.value(value: cityRepository),
-              RepositoryProvider.value(value: contactService),
-            ],
-            child: const MainApp(),
-          );
-        },
+      child: MultiRepositoryProvider(
+        providers: [
+          RepositoryProvider.value(value: weatherRepository),
+          RepositoryProvider.value(value: cityRepository),
+          RepositoryProvider.value(value: contactService),
+        ],
+        child: const MainApp(),
       ),
     ),
   );
