@@ -7,6 +7,7 @@ Pequeña aplicación Flutter que permite consultar el clima (en intervalos de tr
 - Gestión de estado con Bloc/Cubits
 - Integración de idiomas con EasyLocalization
 - Validación de formulario
+- Sesión persistente con SecureStorage
 
 ## Principios SOLID
 
@@ -27,6 +28,8 @@ lib/
 ├── blocs/               # Gestión de estado
 │   ├── weather_cubit.dart
 │   ├── weather_state.dart
+│   ├── auth_cubit.dart
+│   ├── auth_state.dart
 │   ├── login_cubit.dart
 │   ├── login_state.dart
 │   ├── contact_form_state.dart
@@ -44,7 +47,8 @@ lib/
 ├── services/            # llamadas HTTP, servicios de infraestructura
 │   ├── weather_api_service.dart
 │   ├── contact_service.dart
-│   └── login_service.dart
+│   ├── login_service.dart
+│   └── auth_service.dart
 
 ├── views/               # Pantallas de la app
 │   ├── login_screen.dart
@@ -80,3 +84,5 @@ En 'weather_test.dart' se verifica el comportamiento en casos exitosos y fallido
 - Separación de lógica de retry del service
 - Cacheado de imágenes
 - Buscador de ciudades
+- Detalles al pulsar sobre una hora
+
