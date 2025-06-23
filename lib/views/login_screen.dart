@@ -74,7 +74,7 @@ class _LoginView extends StatelessWidget {
                         onChanged: cubit.emailChanged,
                         errorText: state.emailError,
                       ),
-                      const SizedBox(height: 20.0),
+                      const SizedBox(height: 15.0),
                       // CONTRASEÑA
                       _buildTextField(
                         context: context,
@@ -138,7 +138,7 @@ class _LoginView extends StatelessWidget {
       width: double.infinity,
       decoration: const BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color(0xff6190e8), Color(0xffa7bfe8)],
+          colors: [ Color(0xffa7bfe8), Color(0xFF2D76FF)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -149,13 +149,19 @@ class _LoginView extends StatelessWidget {
   Widget _buildTitle(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        const Icon(Icons.sunny, color: Colors.white, size: 40),
+        Image.asset(
+          'assets/weathericon.png',
+          width: 80,
+          height: 80,
+        ),
         const SizedBox(width: 10),
         Text(
           tr('app_title'),
           style: Theme.of(context).textTheme.headlineLarge?.copyWith(
             fontWeight: FontWeight.bold,
+            fontStyle: FontStyle.italic,
             color: Colors.white,
           ),
         ),
@@ -184,7 +190,7 @@ class _LoginView extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-        const SizedBox(height: 10.0),
+        const SizedBox(height: 5.0),
         TextField(
           onChanged: onChanged,
           obscureText: obscureText,
