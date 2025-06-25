@@ -1,19 +1,26 @@
-# Clima SOLID (Prueba técnica)
+# Clima SOLID 
+>(Prueba técnica de Tomás Palaoro)
 
 Pequeña aplicación Flutter que permite consultar el clima (en intervalos de tres horas) de distintas ciudades a través de la API de [OpenWeatherMap](https://openweathermap.org/).
 
 ## Características
 
-- Gestión de estado con Bloc/Cubits
-- Integración de idiomas con EasyLocalization
-- Validación de formulario
-- Sesión persistente con SecureStorage
+- Selector de idioma en tiempo real (inglés por defecto, o español)
+- Consulta de clima por ciudades: Londres, Toronto y Singapur
+- Previsión meteorológica por intervalos de 3 horas
+- Formulario de contacto validado
+- Arquitectura basada en Cubits y separación de capas
+- Login con email y contraseña
+- Gestión de sesión persistente
 
 ## Principios SOLID
 
 Cada clase tiene una única responsabilidad. Los Cubits gestionan exclusivamente el estado y la lógica de presentación, los servicios manejan las llamadas a la API o tareas de infraestructura, los repositorios encapsulan la lógica de negocio, y las vistas y widgets se encargan únicamente de mostrar la interfaz de usuario.
+
 La app se puede extender sin necesidad de modificar las clases existentes. 
+
 Las clases pueden ser reemplazadas por otras que implementen la misma interfaz sin afectar el comportamiento de la app.
+
 Las clases solo dependen de lo que realmente necesitan, sin implementaciones innecesarias.
 
 ## Capturas
@@ -22,7 +29,7 @@ Las clases solo dependen de lo que realmente necesitan, sin implementaciones inn
 ## Estructura
 ```text
 lib/
-├── main.dart            # Configuración de EasyLocalization, MultiProvider y MaterialApp
+├── main.dart            # Configuración de repositorios y blocs
 ├── theme.dart           # Definición de colores y estilos globales
 
 ├── blocs/               # Gestión de estado
@@ -57,7 +64,6 @@ lib/
 │   ├── contact_form_tab.dart
 │   └── splash_screen.dart
 
-
 ├── navigation/          # Gestión de navegación automática
 │   └── auth_routes.dart
 
@@ -89,5 +95,14 @@ En 'weather_test.dart' se verifica el comportamiento en casos exitosos y fallido
 - Separación de lógica de retry del service
 - Cacheado de imágenes
 - Buscador de ciudades
-- Detalles al pulsar sobre una hora
+- Marcar ciudades favoritas
+- Ver más detalles al pulsar sobre una hora
+
+## Ejecución
+Flutter 3.29.3 • channel stable
+```bash
+flutter pub get
+flutter run
+```
+
 
