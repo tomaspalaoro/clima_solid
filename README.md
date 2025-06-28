@@ -99,7 +99,8 @@ En 'weather_test.dart' se verifica el comportamiento en casos exitosos y fallido
 - Ver más detalles al pulsar sobre una hora
 
 ## Ejecución
-Flutter 3.29.3 • channel stable
+Se ha actualizado la versión a la última estable en la fecha de la prueba técnica.
+Flutter 3.32.5 • channel stable
 ```bash
 flutter pub get
 flutter run
