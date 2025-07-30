@@ -86,7 +86,7 @@ En 'weather_test.dart' se verifica el comportamiento en casos exitosos y fallido
 
 ## Notas
 
-- **IMPORTANTE**: El token gratuito de la API está visible para facilitar la ejecución inmediata. En un entorno de producción, este token debe **almacenarse de forma segura** (por ejemplo, usando variables de entorno)
+- **IMPORTANTE**: La clave de API de OpenWeatherMap se inyecta en tiempo de compilación usando --dart-define. Esto permite ejecutar la app sin exponer credenciales en el código fuente.
 - La organización de carpetas actualmente separa responsabilidades por tipo de archivo. En producción podría evolucionar a organización por features.
 
 ## Posibles mejoras futuras
@@ -103,7 +103,15 @@ Se ha actualizado la versión a la última estable en la fecha de la prueba téc
 Flutter 3.32.5 • channel stable
 ```bash
 flutter pub get
-flutter run
 ```
+
+**IMPORTANTE**: Para ejecutar la aplicación, debes proporcionar tu token (por ej. 1234) con el siguiente comando:
+```bash
+flutter run --dart-define=API_KEY=1234
+```
+Puedes obtener tu token gratuito desde: https://home.openweathermap.org/api_keys
+
+La activación del token puede tardar algunos minutos después de crearlo en la web.
+
 
 

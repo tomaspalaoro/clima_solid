@@ -27,5 +27,6 @@
     "logout": "Cerrar sesión",
     "cancel": "Cancelar",
     "accept": "Aceptar",
-    "logout_confirmation": "¿Estás seguro de que deseas salir?"
+    "logout_confirmation": "¿Estás seguro de que deseas salir?",
+    "invalid_api_key": "Clave de API inválida. Más información en el archivo README"
 }
