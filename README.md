@@ -1,38 +1,39 @@
-# Clima SOLID 
->(Prueba técnica de Tomás Palaoro)
+# Clima SOLID
 
-Pequeña aplicación Flutter que permite consultar el clima (en intervalos de tres horas) de distintas ciudades a través de la API de [OpenWeatherMap](https://openweathermap.org/).
+Small demonstration of Flutter knowledge.
 
-## Características
+This application allows checking the weather (in three-hour intervals) of different cities using the [OpenWeatherMap](https://openweathermap.org/) API.
 
-- Selector de idioma en tiempo real (inglés por defecto, o español)
-- Consulta de clima por ciudades: Londres, Toronto y Singapur
-- Previsión meteorológica por intervalos de 3 horas
-- Formulario de contacto validado
-- Arquitectura basada en Cubits y separación de capas
-- Login con email y contraseña
-- Gestión de sesión persistente
+## Features
 
-## Principios SOLID
+- Real-time language selector (English or Spanish)
+- Weather check by cities: London, Toronto, and Singapore
+- 3-hour interval weather forecast
+- Validated contact form
+- Architecture based on Cubits and layer separation
+- Email and password login
+- Persistent session management
 
-Cada clase tiene una única responsabilidad. Los Cubits gestionan exclusivamente el estado y la lógica de presentación, los servicios manejan las llamadas a la API o tareas de infraestructura, los repositorios encapsulan la lógica de negocio, y las vistas y widgets se encargan únicamente de mostrar la interfaz de usuario.
+## SOLID Principles
 
-La app se puede extender sin necesidad de modificar las clases existentes. 
+Each class has a single responsibility. Cubits exclusively manage state and presentation logic, services handle API calls or infrastructure tasks, repositories encapsulate business logic, and views and widgets are solely responsible for displaying the user interface.
 
-Las clases pueden ser reemplazadas por otras que implementen la misma interfaz sin afectar el comportamiento de la app.
+The app can be extended without needing to modify existing classes.
 
-Las clases solo dependen de lo que realmente necesitan, sin implementaciones innecesarias.
+Classes can be replaced by others that implement the same interface without affecting app behavior.
 
-## Capturas
+Classes only depend on what they really need, with no unnecessary implementations.
+
+## Screenshots
  <img src="assets/screenshots/home.png" width="300" alt="Home">
 
-## Estructura
+## Structure
 ```text
 lib/
-├── main.dart            # Configuración de repositorios y blocs
-├── theme.dart           # Definición de colores y estilos globales
+├── main.dart            # Repository and bloc configuration
+├── theme.dart           # Global color and style definitions
 
-├── blocs/               # Gestión de estado
+├── blocs/               # State management
 │   ├── weather_cubit.dart
 │   ├── weather_state.dart
 │   ├── auth_cubit.dart
@@ -42,37 +43,37 @@ lib/
 │   ├── contact_form_state.dart
 │   └── contact_form_cubit.dart
 
-├── models/              # Entidades de dominio y mapeos JSON
+├── models/              # Domain entities and JSON mappings
 │   ├── city_model.dart
 │   ├── contact_model.dart
 │   └── hour_weather_model.dart
 
-├── repositories/        # Interfaces y lógica de negocio
+├── repositories/        # Interfaces and business logic
 │   ├── weather_repository.dart
 │   └── city_repository.dart
 
-├── services/            # llamadas HTTP, servicios de infraestructura
+├── services/            # HTTP calls, infrastructure services
 │   ├── weather_api_service.dart
 │   ├── contact_service.dart
 │   ├── login_service.dart
 │   └── auth_service.dart
 
-├── views/               # Pantallas de la app
+├── views/               # App screens
 │   ├── login_screen.dart
 │   ├── home_screen.dart
 │   ├── city_weather_tab.dart
 │   ├── contact_form_tab.dart
 │   └── splash_screen.dart
 
-├── navigation/          # Gestión de navegación automática
+├── navigation/          # Automatic navigation handling
 │   └── auth_routes.dart
 
-├── widgets/             # Componentes reutilizables
+├── widgets/             # Reusable components
 │   ├── weather_info.dart
 │   ├── language_button.dart
 │   └── logout_button.dart
 
-└── utils/               # Funciones de apoyo
+└── utils/               # Helper functions
     ├── form_validator.dart
     ├── forecast_filter.dart 
     └── date_formatter.dart 
@@ -80,38 +81,39 @@ lib/
 
 ## Tests
 
-Este proyecto incluye tests unitarios.
-En 'login_test.dart' se comprueba la validación de email y contraseña, el flujo de envío exitoso y el manejo de errores.
-En 'weather_test.dart' se verifica el comportamiento en casos exitosos y fallidos al obtener datos meteorológicos. También la correcta deserialización del JSON proporcionado por la API de OpenWeatherMap.
+This project includes unit tests.
+In 'login_test.dart', email and password validation, successful submission flow, and error handling are tested.
+In 'weather_test.dart', behavior is checked for both success and failure when fetching weather data. JSON deserialization from the OpenWeatherMap API is also tested.
 
-## Notas
+## Notes
 
-- **IMPORTANTE**: La clave de API de OpenWeatherMap se inyecta en tiempo de compilación usando --dart-define. Esto permite ejecutar la app sin exponer credenciales en el código fuente.
-- La organización de carpetas actualmente separa responsabilidades por tipo de archivo. En producción podría evolucionar a organización por features.
+- **IMPORTANT**: The OpenWeatherMap API key is injected at compile time using --dart-define. This allows running the app without exposing credentials in the source code.
+- You can log in using **any email and password** (authentication is mocked).
+- The current folder organization separates responsibilities by file type. In production, it could evolve to a feature-based organization.
 
-## Posibles mejoras futuras
+## Possible future improvements
 
-- Autenticación de usuarios desde base de datos
-- Separación de lógica de retry del service
-- Cacheado de imágenes
-- Buscador de ciudades
-- Marcar ciudades favoritas
-- Ver más detalles al pulsar sobre una hora
+- User authentication from a database
+- Retry logic separated from the service
+- Image caching
+- City search
+- Mark favorite cities
+- View more details when tapping on an hour
 
-## Ejecución
-Se ha actualizado la versión a la última estable en la fecha de la prueba técnica.
+## Execution
+The version has been updated to the latest stable release at the time of the technical test.
 Flutter 3.32.5 • channel stable
 ```bash
 flutter pub get
 ```
 
-**IMPORTANTE**: Para ejecutar la aplicación, debes proporcionar tu token (por ej. 1234) con el siguiente comando:
+**IMPORTANT**: To run the application, you must provide your token (e.g., 1234) with the following command:
 ```bash
 flutter run --dart-define=API_KEY=1234
 ```
-Puedes obtener tu token gratuito desde: https://home.openweathermap.org/api_keys
+You can get your free token from: https://home.openweathermap.org/api_keys
 
-La activación del token puede tardar algunos minutos después de crearlo en la web.
+Token activation may take a few minutes after creation on the website.
 
 
 
