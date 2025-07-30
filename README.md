@@ -1,13 +1,13 @@
-# Clima SOLID
+# Flutter Weather Forecast App
 
 Small demonstration of Flutter knowledge.
 
-This application allows checking the weather (in three-hour intervals) of different cities using the [OpenWeatherMap](https://openweathermap.org/) API.
+This android app lets you check the weather (in three-hour intervals) for different cities using the [OpenWeatherMap](https://openweathermap.org/) API.
 
 ## Features
 
 - Real-time language selector (English or Spanish)
-- Weather check by cities: London, Toronto, and Singapore
+- Weather available for the following cities: London, Toronto, and Singapore
 - 3-hour interval weather forecast
 - Validated contact form
 - Architecture based on Cubits and layer separation
@@ -22,7 +22,7 @@ The app can be extended without needing to modify existing classes.
 
 Classes can be replaced by others that implement the same interface without affecting app behavior.
 
-Classes only depend on what they really need, with no unnecessary implementations.
+Classes depend only on what they truly need, avoiding unnecessary implementations.
 
 ## Screenshots
  <img src="assets/screenshots/home.png" width="300" alt="Home">
@@ -83,7 +83,8 @@ lib/
 
 This project includes unit tests.
 In 'login_test.dart', email and password validation, successful submission flow, and error handling are tested.
-In 'weather_test.dart', behavior is checked for both success and failure when fetching weather data. JSON deserialization from the OpenWeatherMap API is also tested.
+In 'weather_test.dart', behavior is checked for both success and failure when fetching weather data. The JSON response from the OpenWeatherMap API is also tested for correct deserialization.
+
 
 ## Notes
 
@@ -101,8 +102,10 @@ In 'weather_test.dart', behavior is checked for both success and failure when fe
 - View more details when tapping on an hour
 
 ## Execution
-The version has been updated to the latest stable release at the time of the technical test.
-Flutter 3.32.5 • channel stable
+This project has been tested on the following Flutter version:
+**Flutter 3.32.5 • channel stable**
+
+To install dependencies, run:
 ```bash
 flutter pub get
 ```
